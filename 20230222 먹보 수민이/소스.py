@@ -5,8 +5,8 @@ N = int(sys.stdin.readline())
 data = []
 for _ in range(N):
     #편의점까지 거리, 포만감
-    (distance, satisfaction) = map(int, sys.stdin.readline().split())
-    data.append([distance, satisfaction])
+    (location, satisfaction) = map(int, sys.stdin.readline().split())
+    data.append([location, satisfaction])
 
 #Destination(1 ≤ L ≤ 1,500)은 수민이의 위치에서 목표지점인 식당까지의 거리
 #P(1≤ P ≤ 100)는 초기 수민이의 포만감
