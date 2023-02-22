@@ -28,9 +28,8 @@ count = 0
 for location, satisfaction in data:
     if check.count(False)<=P:
         break
-    for i in range(satisfaction+1):
-        if location+i<Destination:
-            check[location+i-1] = True
+    for i in range(satisfaction+1):        
+        check[location+i-1] = True
     count += 1
     
 if check.count(False) <= P:
