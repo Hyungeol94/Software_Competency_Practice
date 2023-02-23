@@ -58,5 +58,5 @@ else:
     print (-1)
 
 
-
+#다른 편의점 위치를 넘어가면 Primary or potential satisfaction을 업데이트해주어야 함
 
