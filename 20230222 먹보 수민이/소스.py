@@ -3,7 +3,7 @@ import sys
 def update_satisfaction(data, check):
     for i, [location, satisfaction, actual_satisfaction] in enumerate(data):
         count = 0
-        for j in range(satisfaction):
+        for j in range(satisfaction+1):
             if check[location+j-1] == True:
                 count += 1
         actual_satisfaction = satisfaction - count
@@ -20,7 +20,7 @@ for _ in range(N):
     data.append([location, satisfaction])
 
 #Destination(1 ≤ L ≤ 1,500)은 수민이의 위치에서 목표지점인 식당까지의 거리
-#P(1≤ P ≤ 100)는 초기 수민이의 포만감
+#Primary_satisfaction(1≤ P ≤ 100)는 초기 수민이의 포만감
 (Destination, P) = map(int, sys.stdin.readline().split())
 
 for i, [location, satisfaction] in enumerate(data):
@@ -46,7 +46,7 @@ while(data):
     (location, satisfaction, actual_satisfaction) = data.pop(0)
     if check.count(False)<=P:
         break
-    for i in range(satisfaction):        
+    for i in range(satisfaction+1):        
         check[location+i-1] = True
     count += 1
     #만족감 업데이트 해주기
