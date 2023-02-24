@@ -1,62 +1,69 @@
-#https://coding-ai.aivle-edu.kr/Question/5394/View/1?fromPage=5
+def calculate(my_queue, data, P, Destination):
+    # print('initiated')
+    count = 0
+    current_location = 0
+
+    while (P != 0) & (current_location != Destination):
+        # 움직이기
+        current_location += 1
+        P -= 1
+        # 움직이면서, 다음 편의점이 있는지 살피기
+        while data:
+            next_store_location = data[0][0]
+            next_store_satisfaction = data[0][1]
+            if next_store_location == current_location:
+                my_queue.put([-next_store_satisfaction, next_store_location])
+                data.pop(0)
+                if data:
+                    if data[0][0] == next_store_location:
+                        continue
+            break
+
+        if Destination == current_location:
+            return print(count)
+
+        if (P == 0) & (my_queue.empty() == False):
+            (satisfaction, location) = my_queue.get()
+            satisfaction = -satisfaction
+            count += 1
+            P += satisfaction
+
+    return print(-1)
+
+
+# https://coding-ai.aivle-edu.kr/Question/5394/View/1?fromPage=5
 import sys
-def update_satisfaction(data, check):
-    for i, [location, satisfaction, actual_satisfaction] in enumerate(data):
-        count = 0
-        for j in range(satisfaction+1):
-            if check[location+j-1] == True:
-                count += 1
-        actual_satisfaction = satisfaction - count
-        data[i] = [location, satisfaction, actual_satisfaction]
-        
-    data.sort(key = lambda a: (-a[2], a[0], a[1]))
-                
-        
+from queue import PriorityQueue
+
 N = int(sys.stdin.readline())
 data = []
+
 for _ in range(N):
-    #편의점까지 거리, 포만감
+    # 편의점까지 거리, 포만감
     (location, satisfaction) = map(int, sys.stdin.readline().split())
     data.append([location, satisfaction])
 
-#Destination(1 ≤ L ≤ 1,500)은 수민이의 위치에서 목표지점인 식당까지의 거리
-#Primary_satisfaction(1≤ P ≤ 100)는 초기 수민이의 포만감
+data.sort(key=lambda a: a[0])
+
+# Destination(1 ≤ L ≤ 1,500)은 수민이의 위치에서 목표지점인 식당까지의 거리
+# P(1≤ P ≤ 100)는 초기 수민이의 포만감
 (Destination, P) = map(int, sys.stdin.readline().split())
+check = [False] * Destination
 
-for i, [location, satisfaction] in enumerate(data):
-    if location+satisfaction >= Destination:
-        satisfaction = max(0, Destination-location)
-    data[i] = [location, satisfaction]
-
-
-#actual_satisfaction 지표 만들기
-for i, datum in enumerate(data):
-    data[i].append(datum[1])
-    
-data.sort(key = lambda a: (-a[2], a[0]))
-#print(data)
-
-check = [False]*Destination
-
-#포만감 많은 편의점 먼저 선택하기
+my_queue = PriorityQueue()
+current_location = 0
 
 count = 0
-while(data):
-    #print(data)
-    (location, satisfaction, actual_satisfaction) = data.pop(0)
-    if check.count(False)<=P:
-        break
-    for i in range(satisfaction+1):        
-        check[location+i-1] = True
-    count += 1
-    #만족감 업데이트 해주기
-    update_satisfaction(data, check)
-       
-if check.count(False) <= P:
-    print(count)
+for i, [location, satisfaction] in enumerate(data):
+    distance = location
+    if distance <= P:
+        my_queue.put([-satisfaction, location])
+        count += 1
+
+for _ in range(count):
+    data.pop(0)
+
+if my_queue.empty():
+    print(-1)
 else:
-    print (-1)
-
-
-#다른 편의점 위치를 넘어가면 Primary or potential satisfaction을 업데이트해주어야 함
-
+    calculate(my_queue, data, P, Destination)
