@@ -25,7 +25,7 @@ def calculate(my_queue,
         if Destination == current_location:
             return print(count)
 
-        if (not P) & (not my_queue.empty()):
+        if (not P) and (not my_queue.empty()):
             (satisfaction, location) = my_queue.get()
             satisfaction = -satisfaction
             count += 1
