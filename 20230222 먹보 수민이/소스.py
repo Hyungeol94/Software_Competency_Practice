@@ -1,9 +1,12 @@
-def calculate(my_queue, data, P, Destination):
-    # print('initiated')
+def calculate(my_queue,
+              data,
+              P,
+              Destination):
+
     count = 0
     current_location = 0
 
-    while (P != 0) & (current_location != Destination):
+    while P and (current_location != Destination):
         # 움직이기
         current_location += 1
         P -= 1
@@ -22,7 +25,7 @@ def calculate(my_queue, data, P, Destination):
         if Destination == current_location:
             return print(count)
 
-        if (P == 0) & (my_queue.empty() == False):
+        if (not P) & (not my_queue.empty()):
             (satisfaction, location) = my_queue.get()
             satisfaction = -satisfaction
             count += 1
