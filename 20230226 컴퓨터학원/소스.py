@@ -1,20 +1,29 @@
-def func_1(i):
-    if i != 1:
-        return func_1(i-1)+func_2(i-1)
-    if i == 1:
-        return 2
-
-def func_2(i):
-    if i != 1:
-        return func_1(i-1)*2 + func_2(i-1)
-    if i == 1:
-        return 3
-
 import sys
+(n) = int(sys.stdin.readline())
+data = []
+if n == 1:
+    print(3)
+elif n == 2:
+    print(7)
+else:
+    data = [2,2,3]
 
-#이건 bfs로 모든 가능성을 재면 되지 않을까?
-#분명 timeout의 가능성이 있기 때문에 DP로 해결하는 게 제일 안전함
+    #셋째 i = 2
+    i = 2
+    while i != n:
+        temp = []
+        for datum in data:
+            if datum == 2:
+                temp.append(2)
+                temp.append(3)
+            else:
+                temp.append(2)
+                temp.append(2)
+                temp.append(3)
+        i += 1
+        data = temp.copy()
+    print(sum(data))
 
 
-(N) = int(sys.stdin.readline())
-print(func_2(N))
+
+
