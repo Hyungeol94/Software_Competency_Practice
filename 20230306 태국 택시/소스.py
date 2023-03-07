@@ -38,25 +38,33 @@ my_stack = []
 visited = [False]*N
 check = [False]*N
 
-while not Connected:
+while not Connected and not my_queue.empty():
     [cost, node1, node2] = my_queue.get()
     matrix[node1 - 1].append(node2 - 1)
     matrix[node2 - 1].append(node1 - 1)
+
     #둘 중 하나라도 not visited 여야 함
-    if (not visited[node1-1]) or (not visited[node2-1]):
+    if (not visited[node1 - 1] or not visited[node2 - 1]) and not Connected:
+        visited[node1 - 1] = True
+        visited[node2 - 1] = True
         total_fee += cost
-        visited[node1-1] = True
-        visited[node2-1] = True
+    #모든 노드가 다 방문되었지만, 모든 노드가 다 연결되어 있지 않았을 수도 있을 때
+    #dfs로, 연결되어 있는지를 확인해야 함
+
     if not (False in visited):
-        #dfs해서 연결되었는지 체크하기
         my_stack.append(0)
         dfs(N, 0)
-        check = [False]*N
-        # if Connected == True:
-        #     total_fee += cost
+        check = [False] * N
+        break
+
+while not Connected and not my_queue.empty():
+        # dfs해서 연결되었는지 체크하기
+        [cost, node1, node2] = my_queue.get()
+        my_stack.append(0)
+        dfs(N, 0)
+        check = [False] * N
+        if Connected:
+            total_fee += cost
+            break
 
 print(total_fee)
-
-
-
-
