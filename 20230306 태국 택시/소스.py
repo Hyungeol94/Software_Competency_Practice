@@ -18,7 +18,7 @@ def dfs(N):
 
 
 def test_dfs(N):
-    global Connected
+    global Connected, visit_count
     if visit_count == N:
         Connected = True
         return True
@@ -30,7 +30,7 @@ def test_dfs(N):
                 my_stack.append(i)
                 visit_count += 1
                 check[i-1] = True
-                return test_dfs(N)
+                test_dfs(N)
 
 import sys
 
@@ -103,9 +103,9 @@ while not Connected and not my_queue.empty():
 
         i = 1
         count = 0
-        while False in check:    #####무한루프 도는구간
+        while False in check and i != N:
             visit_count = 1
-            if not check[i-1]:    #####무한루프 도는구간
+            if not check[i-1]:
                 count += 1
                 my_stack.append(i)
                 dfs(N)
@@ -119,7 +119,7 @@ while not Connected and not my_queue.empty():
         test_matrix[node1 - 1].append(node2)
         test_matrix[node2 - 1].append(node1)
 
-        while False in check:
+        while False in check and i != N:
             visit_count = 1
             if not check[i-1]:
                 test_count += 1
@@ -136,6 +136,23 @@ while not Connected and not my_queue.empty():
 
 print(total_fee)
 
+#### test case
+6 5
+1 2 10
+2 3 40
+3 4 20
+4 5 50
+5 6 30
+#답 150
 
-
-
+### 
+# 8 8
+# 1 2 10
+# 1 3 20
+# 3 4 30
+# 2 4 60
+# 4 5 70
+# 5 6 40
+# 6 7 80
+# 7 8 50
+# 답 300
