@@ -1,33 +1,34 @@
 #https://www.acmicpc.net/problem/15591
 global usado
 usado = 1000000001
+from collections import deque
 
-def dfs(my_stack, v, pseudo_usado, matrix, visited):
+def bfs(my_queue, v, matrix, visited):
     global usado
-    node = my_stack.pop()
-    if node == v:
-        #i로부터 v로 가는 길이 있다면, usado 업데이트 해주기
-        usado = min(pseudo_usado, usado)
+    while my_queue:
+        (node, pseudo_usado) = my_queue.popleft()
+        if node == v:
+            usado = min(pseudo_usado, usado)
 
-    else:
-        for (i, r) in matrix[node-1]:
-            if not visited[i-1]:
-                my_stack.append(i)
-                visited[i-1] = True
-                dfs(my_stack, v, min(pseudo_usado, r), matrix, visited)
+        else:
+            for (i, r) in matrix[node - 1]:
+                if not visited[i-1]:
+                    my_queue.append([i, min(pseudo_usado, r)])
+                    visited[i-1] = True
+
 
 def calculate(k, v, matrix):
     global usado
     node_number = len(matrix)
     count = 0
-    my_stack = []
+    my_queue = deque()
     visited = [False]*node_number
     for i in range(1, node_number+1):
         #(연결되어 있다면) i에서 v까지의 usado를 계산하기
-        my_stack.append(i)
         usado = 1000000001
         pseudo_usado = usado
-        dfs(my_stack, v, pseudo_usado, matrix, visited)
+        my_queue.append([i, pseudo_usado])
+        bfs(my_queue, v,matrix, visited)
         visited = [False] * node_number
         if k <= usado and (usado != 1000000001):
             count += 1
