@@ -5,11 +5,12 @@ def find(node, parent):
     while True:
         if parent[i-1] == -1:
             break
+        # collapse
+        parent[node-1] = parent[i-1]
         i = parent[i-1]
-    # collapse
-    if parent[i-1] != -1:
-        parent[node-1] = i
+
     return i
+
 
 def union(this_node, that_node, parent):
     this_parent = find(this_node, parent)
@@ -26,9 +27,9 @@ def union(this_node, that_node, parent):
             that_count += 1
 
     if this_count > that_count:
-        parent[that_node-1] = this_node
+        parent[find(that_node, parent)-1] = find(this_node, parent)
     else:
-        parent[this_node-1] = that_node
+        parent[find(this_node, parent)-1] = find(that_node, parent)
 
 
 import sys
@@ -48,15 +49,18 @@ connected = False
 total_cost = 0
 while my_queue and not connected:
     [cost, origin, destination] = my_queue.get()
-    if find(origin, parent) == -1 and find(destination, parent) == -1:
-        union(origin, destination, parent)
-        total_cost += cost
-    if find(origin, parent)!=find(destination, parent):
-        union(origin, destination, parent)
-        total_cost += cost
+   # print([cost, origin, destination])
+    origin_parent = find(origin, parent)
+    destination_parent = find(destination, parent)
 
-    if parent.count(-1) == 1:
+    if origin_parent != destination_parent:
+        union(origin, destination, parent)
+        total_cost += cost
+    if origin_parent == -1 and destination_parent == -1:
+        union(origin, destination, parent)
+        total_cost += cost
+    if parent.count(-1) == 2:
         connected = True
 
 print(total_cost)
-
+#print(parent)
