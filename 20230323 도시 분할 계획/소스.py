@@ -1,66 +1,55 @@
 #https://www.acmicpc.net/problem/1647
 #union-find 연습문제
 def find(node, parent):
-    i = node
-    while True:
-        if parent[i-1] == -1:
-            break
-        # collapse
-        parent[node-1] = parent[i-1]
-        i = parent[i-1]
+    if parent[node] != node:
+        parent[node] = find(parent[node], parent)
+    return parent[node]
 
-    return i
-
-
-def union(this_node, that_node, parent):
+def union(this_node, that_node, parent, size):
     this_parent = find(this_node, parent)
     that_parent = find(that_node, parent)
-    #weighted union 해야함
-    this_count = 0
-    for i in range(len(parent)):
-        if parent[i-1] == this_parent:
-            this_count += 1
-
-    that_count = 0
-    for i in range(len(parent)):
-        if parent[i-1] == that_parent:
-            that_count += 1
-
-    if this_count > that_count:
-        parent[find(that_node, parent)-1] = find(this_node, parent)
-    else:
-        parent[find(this_node, parent)-1] = find(that_node, parent)
-
+    if this_parent != that_parent:
+        if size[this_parent] < size[that_parent]:
+            this_parent, that_parent = that_parent, this_parent
+        parent[that_parent] = this_parent
+        size[this_parent] += size[that_parent]
 
 import sys
-from queue import PriorityQueue
 (N, M) = list(map(int, sys.stdin.readline().split()))
-my_queue = PriorityQueue()
+edges = []
 for _ in range(M):
     (origin, destination, cost) = list(map(int, sys.stdin.readline().split()))
-    my_queue.put([cost, origin, destination])
+    edges.append((cost, origin, destination))
 
-#parent 노드 설정해주기
-parent = []
-for _ in range(N):
-    parent.append(-1)
+# sort edges in non-decreasing order of weight
+edges.sort()
 
-connected = False
+# parent node and size arrays
+parent = [i for i in range(N+1)]
+size = [1] * (N+1)
+
+# number of connected components
+num_components = N
+
 total_cost = 0
-while my_queue and not connected:
-    [cost, origin, destination] = my_queue.get()
-   # print([cost, origin, destination])
+for edge in edges:
+    (cost, origin, destination) = edge
     origin_parent = find(origin, parent)
     destination_parent = find(destination, parent)
-
     if origin_parent != destination_parent:
-        union(origin, destination, parent)
+        union(origin, destination, parent, size)
         total_cost += cost
-    if origin_parent == -1 and destination_parent == -1:
-        union(origin, destination, parent)
-        total_cost += cost
-    if parent.count(-1) == 2:
-        connected = True
+        num_components -= 1
+        if num_components == 2:
+            break
 
 print(total_cost)
-#print(parent)
+
+
+# It is possible that there are some corner cases that are causing your implementation to time out, although it's hard to say for certain without more information about the specific inputs that are causing the issue.
+
+# One possible source of inefficiency in your implementation is the check for connectedness using the parent.count(-1) == 2 condition. This condition is only satisfied when there are exactly two nodes that have not been connected yet, which means that the while loop will keep running until all but two nodes have been connected. In some cases, this can lead to a large number of unnecessary iterations and cause the program to time out.
+
+# To avoid this issue, you can modify your implementation to check for connectedness using a different condition. One possible approach is to maintain a count of the number of connected components and check if this count is equal to 1, which indicates that all nodes have been connected. This approach can help to avoid unnecessary iterations and improve the efficiency of your algorithm.
+
+# This implementation uses a list to store the edges and sorts them in non-decreasing order of weight before processing them in the while loop. It also maintains a count of the number of connected components and checks if this count is equal to 1, which indicates that all nodes have been connected. This can help to avoid unnecessary iterations and improve the efficiency of the algorithm.
