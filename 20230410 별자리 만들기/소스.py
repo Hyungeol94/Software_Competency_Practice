@@ -24,10 +24,6 @@ for _ in range(num_stars):
     y_position, x_position = list(map(float, sys.stdin.readline().split()))
     star_list.append((y_position, x_position))
 
-star_matrix = []
-for _ in range(num_stars):
-    star_matrix.append([0]*num_stars)
-
 my_stack = []
 parent = [i for i in range(num_stars+1)]
 size = [1]*(num_stars+1)
@@ -39,7 +35,6 @@ for origin_star_index, origin_star_position in enumerate(star_list):
             continue
         (destination_star_y_position, destination_star_x_position) = destination_star_position
         distance = round(((origin_star_y_position-destination_star_y_position)**2 + (origin_star_x_position- destination_star_x_position)**2)**0.5, 2)
-        star_matrix[origin_star_index][destination_star_index] = distance
         my_stack.append([origin_star_index+1, destination_star_index+1, distance])
 
 my_stack.sort(key=lambda a: (a[2]), reverse=True)
