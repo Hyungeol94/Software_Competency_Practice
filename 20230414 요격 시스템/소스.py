@@ -6,7 +6,7 @@ def pseudo_search(pseudo_target, targets_ordered):
     pseudo_targets = deepcopy(targets_ordered)
     next_target_left, next_target_right = pseudo_targets[-1]
     count = 0
-    while pseudo_targets and next_target_left < pseudo_target_right:
+    while pseudo_targets and next_target_left < pseudo_target_right <= next_target_right:
         count += 1
         pseudo_targets.pop()
         if pseudo_targets:
@@ -19,13 +19,15 @@ def search(target, targets_ordered):
     pseudo_target_left = targets_ordered[-1][0]
     max_count = -1
     optimal_targets = []
-    while (pseudo_target_left < target_right):
+    while pseudo_target_left < target_right:
         pseudo_target = (pseudo_target_left, pseudo_target_left + 1)
         ##
         pseudo_count, pseudo_targets, = pseudo_search(pseudo_target, targets_ordered)
         if max_count < pseudo_count:
             max_count = pseudo_count
             optimal_targets = pseudo_targets
+        if max_count > pseudo_count:
+            break
         ##
         pseudo_target_left += 1
 
@@ -37,7 +39,6 @@ def search(target, targets_ordered):
 def solution(targets):
     targets_shortest = sorted(targets, key=lambda a: (a[1] - a[0]))
     targets_ordered = sorted(targets, key=lambda a: (a[0]), reverse=True)
-    targets_defended = [False] * len(targets)
 
     # 왼쪽부터 지워나가기
     count = 0
@@ -49,4 +50,3 @@ def solution(targets):
             max_count, targets_ordered = search(target, targets_ordered)
 
     return count
-
