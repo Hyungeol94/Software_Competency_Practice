@@ -43,6 +43,3 @@ print(total_cost)
 
 
 #MST를 구해보기!!
-
-
-
