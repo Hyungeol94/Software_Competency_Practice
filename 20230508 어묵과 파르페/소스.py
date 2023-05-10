@@ -25,7 +25,7 @@ def search(char_list):
             sub_char_list.pop()
         return abs(right_parfait_count) + search(sub_char_list)
 
-    elif left_parfait_count < abs(right_parfait_count):
+    else:
         sub_char_list = sub_char_list[i:]
         while sub_char_list and sub_char_list[0] == 'F':
             sub_char_list.pop(0)
