@@ -22,15 +22,14 @@ def search(char_list):
     if left_parfait_count > abs(right_parfait_count):
         sub_char_list = sub_char_list[:j]
         while sub_char_list and sub_char_list[-1] == 'F':
-            sub_char_list = sub_char_list[:-1]
+            sub_char_list.pop()
         return abs(right_parfait_count) + search(sub_char_list)
 
-    else:
+    elif left_parfait_count < abs(right_parfait_count):
         sub_char_list = sub_char_list[i:]
         while sub_char_list and sub_char_list[0] == 'F':
-            sub_char_list = sub_char_list[1:]
+            sub_char_list.pop(0)
         return left_parfait_count + search(sub_char_list)
 
-
-char_list = sys.stdin.readline().strip()
+char_list = list(sys.stdin.readline().strip())
 print(search(char_list))
