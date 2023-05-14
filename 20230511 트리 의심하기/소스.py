@@ -27,6 +27,7 @@ for _ in range(N-1):
         B = "YES"
     if origin not in range(1, N+1) or destination not in range(1, N+1):
         C = "YES"
+        continue
     data.append((origin, destination))
     if find(origin, parents) != find(destination, parents):
         union(origin, destination, parents)
