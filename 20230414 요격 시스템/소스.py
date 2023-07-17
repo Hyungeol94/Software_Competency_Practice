@@ -1,15 +1,26 @@
 #https://school.programmers.co.kr/learn/courses/30/lessons/181188
 
+from collections import deque
+
+def is_in_range(interceptor, target):
+    interceptor_start, interceptor_end = interceptor
+    target_start, target_end = target
+    if target_start < interceptor_end:
+        return True
+    else:
+        return False
+
 def solution(targets):
-    targets = sorted(targets, key=lambda a: a[0])
-    n = len(targets)
-    dp = [0] * n
-
-    for i in range(n-1, -1, -1):
-        count = 1
-        for j in range(i+1, n):
-            if targets[i][1] <= targets[j][0]:
-                count = max(count, 1 + dp[j])
-        dp[i] = count
-
-    return max(dp)
+    targets_ordered = sorted(targets, key=lambda a: a[1])
+    targets_ordered = deque(targets_ordered)
+    count = 0
+    while targets_ordered:
+        interceptor = targets_ordered.popleft()
+        count += 1
+        while targets_ordered:
+            target = targets_ordered[0]
+            if is_in_range(interceptor, target):
+                targets_ordered.popleft()
+                continue
+            break
+    return count
