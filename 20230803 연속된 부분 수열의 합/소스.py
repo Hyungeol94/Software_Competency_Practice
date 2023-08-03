@@ -1,14 +1,47 @@
-def solution(sequence, k):=
-    seq_length = len(sequence)
-    for subseq_length in range(seq_length):
-        subseq_sum = sum(sequence[:subseq_length])
-        start = 0
-        end = subseq_length-1
-        while True:            
-            if subseq_sum == k:
+#https://school.programmers.co.kr/learn/courses/30/lessons/178870
+
+def solution(sequence, k):    
+    matrix = []
+    for i in range(len(sequence)):
+        matrix.append([0]*len(sequence))
+        matrix[i][i] = sequence[i]
+        if matrix[i][i] == k:
+            return [i, i]
+    
+    shift = 1
+    while shift != len(sequence):
+        for i in range(len(sequence)):
+            start = i
+            end = start+shift
+            if end == len(sequence):
+                break            
+            matrix[start][end] = matrix[start][end-1]+sequence[end]
+            if matrix[start][end] == k:
                 return [start, end]
-            if k < subseq_sum: break                
-            end += 1
-            if end == seq_length: break            
-            subseq_sum = subseq_sum-sequence[start]+sequence[end]
-            start += 1
+        shift += 1 
+        
+            
+        
+            def solution(sequence, k):    
+    matrix = []
+    for i in range(len(sequence)):
+        matrix.append([0]*len(sequence))
+        matrix[i][i] = sequence[i]
+        if matrix[i][i] == k:
+            return [i, i]
+    
+    shift = 1
+    while shift != len(sequence):
+        for i in range(len(sequence)):
+            start = i
+            end = start+shift
+            if end == len(sequence):
+                break            
+            matrix[start][end] = matrix[start][end-1]+sequence[end]
+            if matrix[start][end] == k:
+                return [start, end]
+        shift += 1 
+        
+            
+        
+            
