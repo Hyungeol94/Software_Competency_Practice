@@ -1,4 +1,4 @@
-from itertools import permutations
+#https://school.programmers.co.kr/learn/courses/30/lessons/172927
 
 def calculate_exhaustion(block, dick):
     if dick == 'dia':
@@ -21,10 +21,22 @@ def calculate_scores(x, minerals):
         index += 1
         if index == len(x):
             break
-        if left ==right:
-            break
     return score
-        
+
+def dfs(depth, coverage, mystack, dick_dict, minimum, minerals, criteria):
+    if depth == criteria:
+        minimum[0] = min(minimum[0], calculate_scores(mystack, minerals))
+    
+    else:
+        for i in range(3):
+            if coverage[i]!=0:
+                mystack.append(dick_dict[i])
+                coverage[i] -= 1
+                dfs(depth+1, coverage, mystack, dick_dict, minimum, minerals, criteria)
+                mystack.pop()
+                coverage[i] += 1
+            
+      
 def solution(picks, minerals):
     dia, iron, stone = picks
     len_blocks = len(minerals)//5 
@@ -39,10 +51,11 @@ def solution(picks, minerals):
             data = picks[index] if sum(coverage)+picks[index]<len_blocks else len_blocks-sum(coverage)
             coverage[index] = data
             index += 1
-    print(coverage)
+            
     #조합을 찾기
-    minimum = 1000000000000000000
-    for x in permutations(['dia']*coverage[0]+['iron']*coverage[1]+['stone']*coverage[2], sum(coverage)):
-        minimum = min(minimum, calculate_scores(x, minerals))
+    minimum = [1000000000000000000]
+    mystack = []
+    dick_dict = {0:'dia', 1:'iron', 2:'stone'}
+    dfs(0, coverage, mystack, dick_dict, minimum, minerals, sum(coverage))
 
-    return minimum
+    return minimum[0]
