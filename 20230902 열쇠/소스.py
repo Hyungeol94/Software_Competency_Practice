@@ -34,23 +34,32 @@ def bfs(starting_points, matrix, keys):
     d_col = [1, 0, -1, 0]
 
     point = 0
-    while myqueue:
-        current_position = myqueue.popleft()
-        row, col = current_position
-        if matrix[row][col] == '$':
+    for [row, col] in starting_points:
+        myqueue.append([row, col])
+        if not visited[row][col] and matrix[row][col] == '$':
             point += 1
         visited[row][col] = True
         if found_new_key(matrix[row][col], keys):
             keys.append(matrix[row][col])
+            starting_points = get_starting_points(matrix, keys)
+            return bfs(starting_points, matrix, keys)
+
+
+    while myqueue:
+        current_position = myqueue.popleft()
+        row, col = current_position
         for dr, dc in list(zip(d_row, d_col)):
             next_row, next_col = row+dr, col+dc
-            if is_valid(next_row, matrix, 'r') and is_valid(next_col, matrix, 'c'):
-                #열쇠를 찾음 -> bfs 새로 시작
-                if not visited[next_row][next_col] and found_new_key(matrix[next_row][next_col], keys):
+            if is_valid(next_row, matrix, 'r') and is_valid(next_col, matrix, 'c') and not visited[next_row][next_col]:
+                #열쇠를 찾음 ->키를 추가하고, 처음부터 가지고 있다고 생각하며 bfs 새로 시작
+                if found_new_key(matrix[next_row][next_col], keys):
                     keys.append(matrix[next_row][next_col])
-                    return bfs(starting_points+[[next_row, next_col]], matrix, keys)
-                if not visited[next_row][next_col] and passable(matrix[next_row][next_col], keys):
+                    starting_points = get_starting_points(matrix, keys)
+                    return bfs(starting_points, matrix, keys)
+                if passable(matrix[next_row][next_col], keys):
                     myqueue.append([next_row, next_col])
+                    if matrix[next_row][next_col] == '$':
+                        point += 1
                     visited[next_row][next_col] = True
     return point
 
@@ -65,13 +74,13 @@ def get_starting_points(matrix, keys):
         if passable(mark, keys):
             starting_points.append([len(matrix)-1, j])
 
-    for j, mark in enumerate(list(zip(*matrix))[0]):
+    for j, mark in enumerate(list(zip(*matrix))[0][1:-1]):
         if passable(mark, keys):
-            starting_points.append([j, 0])
+            starting_points.append([j+1, 0])
 
-    for j, mark in enumerate(list(zip(*matrix))[-1]):
+    for j, mark in enumerate(list(zip(*matrix))[-1][1:-1]):
         if passable(mark, keys):
-            starting_points.append([j, len(list(zip(*matrix)))-1])
+            starting_points.append([j+1, len(list(zip(*matrix)))-1])
     return starting_points
 
 
