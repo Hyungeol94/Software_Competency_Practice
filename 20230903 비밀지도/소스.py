@@ -18,7 +18,7 @@ def convert(arr, n):
 def solution(n, arr1, arr2):
     arr1 = convert(arr1, n)
     arr2 = convert(arr2, n)
-    matrix = []x
+    matrix = []
     for i, [str1, str2] in enumerate(zip(arr1, arr2)):
         arr = []
         for j, [c1, c2] in enumerate(zip(str1, str2)):
