@@ -27,7 +27,7 @@ def is_valid(next_row, next_col, matrix):
 def clear_visited(visited, row, col):
     for i, r in enumerate(visited):
         visited[i] = '0'*len(visited[0])
-        check_visited(row, col, visited)
+    check_visited(row, col, visited)
     return visited
 
 
@@ -40,8 +40,10 @@ def bfs(matrix, queue, result):
     dcs = [1, 0, -1, 0]
     while queue:
         [row, col, keys, visited, depth] = queue.popleft()
+        visited = visited.split(' ')
         if matrix[row][col] == '1':
             result[0] = min(result[0], depth)
+            continue
 
         if found_new_key(matrix[row][col], keys):
             keys = keys+matrix[row][col]
@@ -53,9 +55,8 @@ def bfs(matrix, queue, result):
             if (is_valid(next_row, next_col, matrix)
                     and passable(next_row, next_col, keys, matrix)
                     and not visited[next_row][next_col] == '1'):
-                queue.append([next_row, next_col, keys, visited, depth+1])
                 check_visited(next_row, next_col, visited)
-
+                queue.append([next_row, next_col, keys, ' '.join(visited), depth+1])
 
 n, m = map(int, input().split())
 matrix = []
@@ -72,7 +73,7 @@ for i in range(n):
             check_visited(i,j, visited)
 
 start.append(keys)
-start.append(visited)
+start.append(' '.join(visited))
 start.append(0)
 queue = deque([start])
 result = [25001]
