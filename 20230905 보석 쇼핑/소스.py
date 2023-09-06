@@ -33,7 +33,7 @@ def solution(gems):
         # check해주기
         gems_check[gems_unique.index(gems[right])] = True
         # 왼쪽 걸 빼도 되는지 확인하고, 빼도 되면 빼기
-        while set(gems[left:right+1] ) -set(gems[left+1:right+1] )==set({}):
+        while subsequence!= [] and (set(subsequence) -set(subsequence[1:] )==set({})):
             if subsequence != []: subsequence.pop(0)
             left += 1
 
