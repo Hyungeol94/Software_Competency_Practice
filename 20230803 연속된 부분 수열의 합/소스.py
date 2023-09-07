@@ -13,7 +13,7 @@ def solution(sequence, k):
         subsequence_sum -= sequence[left] if left >= 0 else 0
         left += 1
 
-        if right < left or left == len(sequence):
+        if left == len(sequence):
             break
 
         command = 'expand' if subsequence_sum < k else 'shrink'
@@ -45,8 +45,4 @@ def solution(sequence, k):
     answer.sort(key = lambda a:(a[1]-a[0], a[0]))
     #print(answer)
     return answer[0]
-
-# print(solution([1, 2, 3, 4, 5], 7))
-# print(solution([1, 1, 1, 2, 3, 4, 5], 5))
-# print(solution([2, 2, 2, 2, 2], 6))
 
