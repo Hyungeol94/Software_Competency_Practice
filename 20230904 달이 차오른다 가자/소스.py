@@ -26,37 +26,36 @@ def is_valid(next_row, next_col, matrix):
 
 def clear_visited(visited, row, col):
     for i, r in enumerate(visited):
-        visited[i] = '0'*len(visited[0])
+        visited[i] = [False]*len(visited[0])
     check_visited(row, col, visited)
     return visited
 
 
 def check_visited(row, col, visited):
-    new_row = visited[row][:col] + '1' + visited[row][col + 1:] if col < len(visited[row]) else visited[row][:col] + '1'
-    visited[row] = new_row
+    visited[row][col] = True
 
 def bfs(matrix, queue, result):
     drs = [0, -1, 0, 1]
     dcs = [1, 0, -1, 0]
     while queue:
-        [row, col, keys, visited, depth] = queue.popleft()
-        visited = visited.split(' ')
+        [row, col, keys, depth] = queue.popleft()
         if matrix[row][col] == '1':
             result[0] = min(result[0], depth)
             continue
 
         if found_new_key(matrix[row][col], keys):
             keys = keys+matrix[row][col]
-            visited = clear_visited(copy.deepcopy(visited), row, col)
+            clear_visited(visited, row, col)
+            queue = deque([[row, col, keys, depth]])
 
         for dr, dc in zip(drs, dcs):
             next_row = row+dr
             next_col = col+dc
             if (is_valid(next_row, next_col, matrix)
                     and passable(next_row, next_col, keys, matrix)
-                    and not visited[next_row][next_col] == '1'):
+                    and not visited[next_row][next_col]):
                 check_visited(next_row, next_col, visited)
-                queue.append([next_row, next_col, keys, ' '.join(visited), depth+1])
+                queue.append([next_row, next_col, keys, depth+1])
 
 n, m = map(int, input().split())
 matrix = []
@@ -66,14 +65,13 @@ end = []
 keys = ''
 for i in range(n):
     matrix.append(input().strip())
-    visited.append('0'*m)
+    visited.append([False]*m)
     for j, mark in enumerate(matrix[i]):
         if mark == '0':
             start = [i,j]
             check_visited(i,j, visited)
 
 start.append(keys)
-start.append(' '.join(visited))
 start.append(0)
 queue = deque([start])
 result = [25001]
