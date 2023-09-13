@@ -1,16 +1,19 @@
 #https://www.acmicpc.net/problem/1194
 
 from collections import deque
-
+import copy
 def passable(row, col, keys, matrix):
-    if matrix[row][col].lower() in keys:
+    if matrix[row][col] == '#':
+        return False
+    elif matrix[row][col] in '.01abcdef':
         return True
-    if matrix[row][col] in '01.abcdef':
+    elif bitmask(matrix[row][col].lower()) & keys:
         return True
     return False
 
+
 def found_new_key(mark, keys):
-    if mark in 'abcdef' and not mark in keys:
+    if mark in 'abcdef' and not (bitmask(mark) & keys):
         return True
     return False
 
@@ -23,6 +26,10 @@ def is_valid(next_row, next_col, matrix):
     return True
 
 
+def bitmask(key):
+    return 1 << (ord(key)-ord('a'))
+
+
 def bfs(matrix, visited, queue, result):
     drs = [0, -1, 0, 1]
     dcs = [1, 0, -1, 0]
@@ -33,36 +40,34 @@ def bfs(matrix, visited, queue, result):
             result[0] = min(result[0], depth)
 
         if found_new_key(matrix[row][col], keys):
-            keys = sorted(keys+[matrix[row][col]])
-            visited[''.join(keys)] = []
-            for _ in range(len(matrix)):
-                visited[''.join(keys)].append([False]*len(matrix[0]))
-            visited[''.join(keys)][row][col] = True
+            keys = bitmask(matrix[row][col]) | keys
+            visited[keys] = [[False]*len(matrix[0]) for _ in range(len(matrix))]
+            visited[keys][row][col] = True
 
         for dr, dc in zip(drs, dcs):
             next_row = row+dr
             next_col = col+dc
             if (is_valid(next_row, next_col, matrix)
-                    and passable(next_row, next_col, keys, matrix)
-                    and not visited[''.join(keys)][next_row][next_col]):
+                    and not visited[keys][next_row][next_col]
+                    and passable(row, col, keys, matrix)):
                 queue.append([next_row, next_col, depth+1, keys])
-                visited[''.join(keys)][next_row][next_col] = True
+                visited[keys][next_row][next_col] = True
 
 
 n, m = map(int, input().split())
 matrix = []
 start = []
 end = []
-keys = []
+keys = 0
 visited = {}
-visited[''.join(keys)] = []
+visited[keys] = []
 for i in range(n):
     matrix.append(input().strip())
-    visited[''.join(keys)].append([False]*m)
+    visited[keys].append([False]*m)
     for j, mark in enumerate(matrix[i]):
         if mark == '0':
             start = [i,j]
-            visited[''.join(keys)][i][j] = True
+            visited[keys][i][j] = True
 
 start.append(0)
 start.append(keys)
