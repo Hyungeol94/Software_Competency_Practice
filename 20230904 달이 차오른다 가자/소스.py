@@ -5,7 +5,9 @@ import copy
 def passable(row, col, keys, matrix):
     if matrix[row][col] == '#':
         return False
-    elif matrix[row][col] in '.01abcdef':
+    elif matrix[row][col] in '.01':
+        return True
+    elif 'a' <= matrix[row][col] <= 'f':
         return True
     elif bitmask(matrix[row][col].lower()) & keys:
         return True
@@ -38,10 +40,8 @@ def bfs(matrix, visited, queue, result):
         [row, col, depth, keys] = queue.popleft()
         if matrix[row][col] == '1':
             result[0] = min(result[0], depth)
-
         if found_new_key(matrix[row][col], keys):
             keys = bitmask(matrix[row][col]) | keys
-            visited[keys] = [[False]*len(matrix[0]) for _ in range(len(matrix))]
             visited[keys][row][col] = True
 
         for dr, dc in zip(drs, dcs):
@@ -59,11 +59,10 @@ matrix = []
 start = []
 end = []
 keys = 0
-visited = {}
-visited[keys] = []
+visited = [[[False]*m for _ in range(n)] for _ in range(64)]
+
 for i in range(n):
     matrix.append(input().strip())
-    visited[keys].append([False]*m)
     for j, mark in enumerate(matrix[i]):
         if mark == '0':
             start = [i,j]
