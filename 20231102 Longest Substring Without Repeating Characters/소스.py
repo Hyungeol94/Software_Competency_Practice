@@ -29,8 +29,3 @@ class Solution:
                     command = "expand"
                     continue
         return max_length
-                
-                
-                
-
-  
