@@ -11,9 +11,9 @@ const MOD = 1e9 + 7;
 var calculate = (candidates, my_stack, queries) => { 
     // console.log(candidates, my_stack)
     const power = []
-    for(let i =0;i<my_stack.length;i++){
+    for(let i = my_stack.length-1;0<=i;i--){
         if (my_stack[i] == 1){
-            power.push(candidates[i])
+            power.push (candidates[my_stack.length-1-i])
         }
     }
     // console.log(power)
@@ -30,44 +30,32 @@ var calculate = (candidates, my_stack, queries) => {
     return answer
 }
 
-var isConditionMet = (candidates, my_stack, n) => {
-    let sum = 0
-    for(let i = 0;i<my_stack.length;i++){
-        if (my_stack[i] == 0){  
-            sum += candidates[i]
-        }
-    }
-    if (sum == n){ 
-        return true
-    }
-    return false
+
+var dfs = function(value, depth, my_stack, candidates, n, queries, sum) {
+  if (depth === candidates.length) {
+      if (sum === n) {
+          value[0] = calculate(candidates, my_stack, queries);
+          return true;  // Indicate that a valid combination is found
+      }
+      return false;  // No need to continue if the sum is not equal to n
+  } else {
+      for (let i = 0; i < 2; i++) {
+          my_stack.push(i);
+          if (i === 1) {
+              sum += candidates[candidates.length - 1 - depth];
+          }
+          if (sum <= n && dfs(value, depth + 1, my_stack, candidates, n, queries, sum)) {
+              return true;  // Stop recursion if a valid combination is found
+          }
+          my_stack.pop();
+          if (i === 1) {
+              sum -= candidates[depth];
+          }
+      }
+  }
+  return false;  // Return false if no valid combination is found at this level
 }
 
-var dfs = function(value, depth, my_stack, candidates, n, queries, sum){
-    
-    if (depth == candidates.length){ // 이 조건이 왜  필요하지?
-        if (sum == n){
-            value[0] = calculate(candidates, my_stack, queries)
-            return
-        }
-    }
-
-    else{
-        for(let i = 0;i<2;i++){
-            my_stack.push(i)
-            if(i == 1){
-                sum += candidates[depth]
-            }
-            if (sum <= n){
-              dfs(value, depth+1, my_stack, candidates, n, queries, sum)   
-            }
-            my_stack.pop()
-            if(i == 1){
-                sum -= candidates[depth]
-            }
-        }
-    }
-}
 
 var getCandidates = (n) => {
   let i = 0
@@ -90,3 +78,4 @@ var productQueries = function(n, queries) {
     dfs(value, 0, my_stack, candidates, n, queries, sum)
     return value[0]
 };
+
