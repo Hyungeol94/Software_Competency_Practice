@@ -90,8 +90,7 @@ def destructable(info, matrix):
             if not isColumnConnected(x-1, y, n, matrix):
                 return False
 
-    # 왼쪽으로 연결된 보가 있다면, 그 보의 아랫쪽에 지탱해주는 기둥이 하나라도 있는지
-    # 여기가 문제
+    # 오른쪽으로 연결된 보가 있다면, 그 보의 아랫쪽에 지탱해주는 기둥이 하나라도 있는지
         if isBarrage(x+1, y, n, matrix) and not isColumnConnected(x+1, y, n, matrix):
             if not isColumnConnected(x+2, y, n, matrix):
                 return False
@@ -100,16 +99,16 @@ def destructable(info, matrix):
     else: #기둥일 때
         #기둥 위에 세워진 기둥이 있는가
         if isColumn(x, y+1, n, matrix):
-            if not isBarrageConnected(x, y, n, matrix) and not isBarrage(x, y, n, matrix):
+            if not isBarrageConnected(x, y+1, n, matrix) and not isBarrage(x, y+1, n, matrix):
                 return False
         #기둥 왼쪽에 보가 있는가
-        if isBarrageConnected(x,y,n,matrix):
-            if not isColumnConnected(x-1, y, n, matrix) and not isBarrageConnected(x-1, y, n, matrix):
+        if isBarrageConnected(x,y+1,n,matrix):
+            if not isColumnConnected(x-1, y+1, n, matrix) and not isBarrageConnected(x-1, y+1, n, matrix):
                 return False
 
         #기둥 오른쪽에 보가 있는가
-        if isBarrage(x, y, n, matrix):
-            if not isColumnConnected(x+1, y, n, matrix) and not isBarrage(x,y,n,matrix):
+        if isBarrage(x, y+1, n, matrix):
+            if not isColumnConnected(x+1, y+1, n, matrix) and not isBarrage(x+1,y+1,n,matrix):
                 return False
         return True
 
