@@ -8,22 +8,26 @@ def constructable(info, matrix):
     n = len(matrix[0])
     if construct:  # 보
         # 밑에 기둥이 있다면 true
-        if isColumnConnected(x,y,n,matrix):
+        if x == n-1:
+            return False
+        if isColumnSupported(x,y,n,matrix):
             return True
-        if isColumnConnected(x+1, y, n, matrix):
+        if isColumnSupported(x+1, y, n, matrix):
             return True
         # 양 옆에 보가 있다면 true
-        if isBarrageConnected(x,y,n,matrix) and isBarrage(x+1, y, n, matrix):
+        if isBarrageSupported(x,y,n,matrix) and isBarrage(x+1, y, n, matrix):
             return True
     else:  # 기둥
         # 바닥이라면 true
+        if y == n-1:
+            return False
         if y == 0:
             return True
         #밑에 기둥이 있다면
-        if isColumnConnected(x,y,n,matrix):
+        if isColumnSupported(x,y,n,matrix):
             return True
         # 밑에 보가 있다면 True
-        if isBarrageConnected(x, y, n, matrix):
+        if isBarrageSupported(x, y, n, matrix):
             return True
         if isBarrage(x,y,n,matrix):
             return True
@@ -45,11 +49,15 @@ def build(info, matrix):
 def isBarrage(x, y, n, matrix): #보가 설치되어 있는지
     if isValid(x, y, n) and matrix[0][x][y] == 1:
         return True
+    if y == 0:
+        return True
     return False
 
 
-def isBarrageConnected(x,y,n, matrix): #닿아있는 보가 있는지
+def isBarrageSupported(x,y,n, matrix): #닿아있는 보가 있는지
     if isValid(x,y,n) and matrix[1][x][y] == 1:
+        return True
+    if y == 0:
         return True
     return False
 
@@ -60,8 +68,10 @@ def isColumn(x,y,n, matrix): #기둥이 설치되어 있는지
     return False
 
 
-def isColumnConnected(x,y,n, matrix): #닿아있는 기둥이 있는지
+def isColumnSupported(x,y,n, matrix): #닿아있는 기둥이 있는지
     if isValid(x,y,n) and matrix[3][x][y] == 1:
+        return True
+    if y == 0:
         return True
     return False
 
@@ -73,43 +83,51 @@ def destructable(info, matrix):
     #단방향이므로 가능
 
     if structure: #destruct barrage
-    # 왼쪽 보 위에 세워진 기둥이 있는가
+    # 보의 왼쪽 교차점 위에 세워진 기둥이 있는가
         if isColumn(x,y,n,matrix):
-        #왼쪽 아래에 기둥이 없고, 왼쪽과 연결된 보가 없으면 return False
-            if not isColumnConnected(x,y,n, matrix) and not isBarrageConnected(x,y,n,matrix):
+        #왼쪽 교차점 아래에 기둥이 없고, 왼쪽 교차점과 연결된 보가 없으면 return False
+            if not (isColumnSupported(x,y,n, matrix) or isBarrageSupported(x, y, n, matrix)):
                 return False
 
-    # 오른쪽에 세워진 기둥이 있는가
+    # 보의 오른쪽 교차점 위에 세워진 기둥이 있는가
         if isColumn(x+1, y, n, matrix):
-            #오른쪽 아래에 기둥이 없고, 오른쪽과 연결된 보가 없으면 return False
-            if not isColumnConnected(x+1, y, n, matrix) and not isBarrage(x+1, y, n, matrix):
+            #오른쪽 교차점 아래에 기둥이 없고, 오른쪽 교차점과 연결된 보가 없으면 return False
+            if not (isColumnSupported(x+1, y, n, matrix) or isBarrage(x+1, y, n , matrix)):
                 return False
 
-    # 연결된 보가 있다면, 그 보의 아랫쪽에 지탱해주는 기둥이 하나라도 있는지
-        if isBarrageConnected(x,y,n,matrix) and not isColumnConnected(x, y, n, matrix):
-            if not isColumnConnected(x-1, y, n, matrix):
+    # 왼쪽 교차점과 연결된 보가 있다면, 그 보의 아랫쪽에 지탱해주는 기둥이 하나라도 있는지
+        if isBarrageSupported(x,y,n,matrix):
+            if not (isColumnSupported(x-1, y, n, matrix) or isColumnSupported(x, y, n, matrix)):
                 return False
 
-    # 오른쪽으로 연결된 보가 있다면, 그 보의 아랫쪽에 지탱해주는 기둥이 하나라도 있는지
-        if isBarrage(x+1, y, n, matrix) and not isColumnConnected(x+1, y, n, matrix):
-            if not isColumnConnected(x+2, y, n, matrix):
+    # 오른쪽 교차점과 연결된 보가 있다면, 그 보의 아랫쪽에 지탱해주는 기둥이 하나라도 있는지
+        if isBarrage(x+1, y, n, matrix):
+            if not (isColumnSupported(x+1, y, n, matrix) or isColumnSupported(x+2, y, n, matrix)):
                 return False
         return True
 
     else: #기둥일 때
         #기둥 위에 세워진 기둥이 있는가
         if isColumn(x, y+1, n, matrix):
-            if not isBarrageConnected(x, y+1, n, matrix) and not isBarrage(x, y+1, n, matrix):
-                return False
-        #기둥 왼쪽에 보가 있는가
-        if isBarrageConnected(x,y+1,n,matrix):
-            if not isColumnConnected(x-1, y+1, n, matrix) and not isBarrageConnected(x-1, y+1, n, matrix):
+            if not (isBarrageSupported(x, y+1, n, matrix) or isBarrage(x, y+1, n, matrix)):
                 return False
 
-        #기둥 오른쪽에 보가 있는가
+        #기둥 위에 왼쪽 방향으로 세워진 보가 있는가
+        if isBarrageSupported(x,y+1,n,matrix):
+            #기둥 위에 왼쪽 방향으로 세워진 보를 지탱하는 다른 기둥이 없을 때
+            if not isColumnSupported(x-1, y+1, n, matrix):
+                #그 보를 지탱하는 다른 보가 양쪽에 있어야 함
+                if not (isBarrage(x, y+1, n, matrix) and isBarrageSupported(x-1, y+1, n, matrix)):
+                    return False
+
+
+        #기둥 위에 오른쪽 방향으로 세워진 보가 있는가
         if isBarrage(x, y+1, n, matrix):
-            if not isColumnConnected(x+1, y+1, n, matrix) and not isBarrage(x+1,y+1,n,matrix):
-                return False
+            # 기둥 오른쪽으로 연결된 보를 지탱하는 다른 기둥이 없을 때
+            if not isColumnSupported(x+1, y+1, n, matrix):
+                # 그 보를 지탱하는 다른 보가 양쪽에 있어야 함
+               if not (isBarrage(x+1, y+1, n, matrix) and isBarrageSupported(x, y+1, n, matrix)):
+                   return False
         return True
 
 def destruct(info, matrix):
@@ -147,6 +165,3 @@ def solution(n, build_frame):
                 answer.append([i, j, 0])  # 기둥
     answer.sort()
     return answer
-
-
-#solution(100,	[[2, 0, 0, 1], [100, 0, 0, 1], [100, 1, 1, 1], [99, 1, 1, 1], [99, 1, 0, 1], [99, 0, 0, 1]])
