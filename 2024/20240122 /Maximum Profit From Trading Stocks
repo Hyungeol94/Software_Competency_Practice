@@ -1,0 +1,33 @@
+#LeetCode 2291. Maximum Profit From Trading Stocks
+#You are given two 0-indexed integer arrays of the same length present and future where present[i] is the current price of the ith stock and future[i] is the price of the ith stock a year in the future. You may buy each stock at most once. You are also given an integer budget representing the amount of money you currently have.
+#Return the maximum amount of profit you can make.
+
+class Solution:
+    def maximumProfit(self, present: List[int], future: List[int], budget: int) -> int:
+        n = len(present)
+        value = [0]+[a[0]-a[1] for a in zip(future, present)]
+        w = [0]+present
+        P = [[0 for i in range(budget+1)] for i in range(n+1)]
+        for i in range(1, n+1):
+            P[i][0] = 0
+            for ww in range(0, budget+1):
+                if w[i] <= ww:
+                    tmp = value[i]+P[i-1][ww-w[i]]
+                    if ((tmp > P[i-1][ww])):
+                        P[i][ww] = tmp
+                    else:
+                        P[i][ww] = P[i-1][ww]
+                else:
+                    P[i][ww] = P[i-1][ww]
+        return P[n][budget]
+
+
+
+
+
+
+        
+
+            
+
+        
