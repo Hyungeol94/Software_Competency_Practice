@@ -1,4 +1,7 @@
+from functools import cache
+
 class Solution:
+    @cache
     def wordBreakCheck(self, word):
         if self.checkTable.get(word):
             return self.checkTable[word]
