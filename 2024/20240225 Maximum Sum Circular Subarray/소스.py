@@ -1,53 +1,41 @@
-#Maximum Sum Circular Subarray
+from typing import List
 
 class Solution:
     def maxSubarraySumCircular(self, nums: List[int]) -> int:
         left = 0
         right = 0
-        currentSum = 0
-        maxSum = -float('inf')
+        currentSum = nums[0]
+        maxSum = nums[0]
         n = len(nums)
-        limit = 2*n
+        limit = 2 * n
         if n == 1:
             return nums[0]
 
         while True:
+            #worthy?
+            right += 1
+            if right == limit:
+                break
+
             if currentSum < 0:
-                left = right % n 
-                currentSum = nums[left]
-                maxSum = max(maxSum, currentSum)
-                right += 1
-                if right == limit:
-                    return maxSum
-                continue
-            
-             #인덱스가 겹치는지 확인
-            if n <= right and left == right % n:
-                currentSum -= nums[left]
-                maxSum = max(currentSum, maxSum)        
-                left += 1
-                if left < n:
-                    continue
-                return maxSum
-
+                #not worthy
+                left = right
+                currentSum = nums[left % n ]
             else:
-                #겹치지 않을 때 
+                #worthy:
                 currentSum += nums[right % n]
-                maxSum = max(currentSum, maxSum)        
-                right += 1
+
+            #overlaps?
+            if n<= right-left:
+                #overlaps
+                left += 1 
+                right = left
                 if right == limit:
-                    return maxSum
-
-            
-                    
-
-    
-
+                    break
+                currentSum = nums[right % n]
                 
-                
-        
+            maxSum = max(maxSum, currentSum)
+        return maxSum
 
 
-
-        
 
