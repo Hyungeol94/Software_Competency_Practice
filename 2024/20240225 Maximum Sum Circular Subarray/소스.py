@@ -1,41 +1,42 @@
+#https://leetcode.com/problems/maximum-sum-circular-subarray/description/
 from typing import List
 
 class Solution:
     def maxSubarraySumCircular(self, nums: List[int]) -> int:
-        left = 0
+        #Kadane Maximum
         right = 0
-        currentSum = nums[0]
-        maxSum = nums[0]
         n = len(nums)
-        limit = 2 * n
-        if n == 1:
+        if len(nums) == 1:
             return nums[0]
-
-        while True:
-            #worthy?
-            right += 1
-            if right == limit:
-                break
-
-            if currentSum < 0:
-                #not worthy
-                left = right
-                currentSum = nums[left % n ]
-            else:
-                #worthy:
-                currentSum += nums[right % n]
-
-            #overlaps?
-            if n<= right-left:
-                #overlaps
-                left += 1 
-                right = left
-                if right == limit:
-                    break
-                currentSum = nums[right % n]
-                
+        
+        maxSum = -float('inf')
+        currentSum = 0
+        while True: 
+            currentSum += nums[right]
             maxSum = max(maxSum, currentSum)
-        return maxSum
-
-
+            if currentSum < 0:                                
+                currentSum = 0
+            right += 1
+            if right == n:
+                break            
+       
+       #Kadane minimum
+        right = 0
+        minSum = float('inf')
+        currentSum = 0
+        while True:
+            currentSum += nums[right]
+            minSum = min(minSum, currentSum)
+            if nums[right] < currentSum:               
+                currentSum = nums[right]
+                minSum = min(minSum, currentSum)
+            right += 1
+            if right == n:
+                break
+        if minSum != sum(nums):
+            return max(maxSum, sum(nums)-minSum)
+        else:
+            return maxSum
+        
+        
 
