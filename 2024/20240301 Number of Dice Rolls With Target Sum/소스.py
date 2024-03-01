@@ -7,12 +7,12 @@ class Solution:
                 if 1<= target <= k:
                     return 1
                 else:
-                    return -float('inf')
+                    return 0
 
             else:
                 count = 0
                 for j in range(1, k+1):
-                    count = count+dp(i-1, target-j) if dp(i-1, target-j)!=-float('inf') else count
+                    count = count+dp(i-1, target-j)
                 return count
                 
         return dp(n, target) % (10**9+7)
