@@ -40,6 +40,8 @@ class Solution:
             if s1 == s3:
                 return True
             return False
+        if len(s1)+len(s2)!=len(s3):
+            return False
 
         return dp(0, 0, 0)
             
