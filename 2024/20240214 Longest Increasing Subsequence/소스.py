@@ -1,22 +1,13 @@
-#https://leetcode.com/problems/longest-increasing-subsequence/
+#https://leetcode.com/problems/longest-increasing-subsequence/description/
 
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
         #state: 이전에 선택된 숫자, index 두 가지 있어야 함
         n = len(nums)
-        @lru_cache(50000)
-        def dp(limit, i):
-            if i == n-1:
-                answer = 1 if limit < nums[i] else 0
-                return answer
-            
-            if limit < nums[i]: #i번째 수가 선택 가능한 상황이라면
-                return max(1+dp(nums[i], i+1), dp(limit, i+1))
-            else:
-                return dp(limit, i+1)
-       
-        return dp(-float('inf'), 0)
-        
+        dp = [1]*n
+        for i in range(1, n):
+            for j in range(i):
+                if nums[i] > nums[j]:
+                    dp[i] = max(dp[i], dp[j]+1)
+        return max(dp)
 
-
-        
