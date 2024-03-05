@@ -1,27 +1,43 @@
 #https://www.acmicpc.net/problem/7579
 
-from functools import cache
+
+from functools import lru_cache
 class Solution():
     def minCost(self, n, k, memories, costs):
+        #메모리 크기별로 정렬하기
+        arr = list(zip(memories, costs)).sort(key=lambda a: a[0])
+        #sliding window 방식
         if n == 1:
-            if k <= memories[0]:
-                return costs[0]
-            return float('inf')
+            return costs[0]
 
-        @cache
-        def dp(i, k, state):
-            if i == 0:
-                if state == 0: #선택하지 않음
-                    if k <= 0:
-                        return 0
-                    return float('inf')
-                else:
-                    if k-memories[0] <= 0:
-                        return costs[0]
-                    return float('inf')
+        left = 0
+        right = 1
+        sum = memories[0]+memories[1]
+        cost = costs[0]+costs[1]
+        minCost = float('inf')
+        while left!=n-1:
+            if sum < k:
+                right = right+1 if right!=n-1 else right
+                sum = sum+memories[right] if right!=n-1 else sum
+                cost = cost + costs[right] if right != n - 1 else cost
             else:
-                return min(costs[i]+dp(i-1, k-memories[i], 1), dp(i-1, k, 0))
-        return min(costs[n-1]+dp(n-1, k-memories[n-1], 1), dp(n-1, k, 0))
+                minCost = min(minCost, cost)
+                sum = sum - memories[left] if (left!=n-1 and left < right) else sum
+                cost = cost - costs[left] if (left!=n-1 and left < right) else cost
+                left = left+1 if (left!=n-1 and left < right) else left
+
+            if right == n-1:
+                while True:
+                    if k <= sum and left<=n-1:
+                        minCost = min(minCost, cost)
+                        sum = sum - memories[left]
+                        cost = cost - costs[left]
+                    else:
+                        left = n-1
+                        break
+
+
+        return minCost
 
 
 
