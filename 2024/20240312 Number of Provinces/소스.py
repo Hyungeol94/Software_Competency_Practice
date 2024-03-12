@@ -20,11 +20,9 @@ class Solution:
                 if self.ranks[root_v] > self.ranks[root_k]:
                     self.parents[root_k] = root_v
                 if self.ranks[root_v] < self.ranks[root_k]:
-                    self.ranks[root_v] = root_k
                     self.parents[root_v] = root_k
                 else:
                     self.ranks[root_v] += 1
-                    self.ranks[root_k] = self.ranks[root_v]
                     self.parents[root_k] = root_v
 
         n = len(isConnected)
@@ -40,12 +38,3 @@ class Solution:
                         num_components -= 1
 
         return num_components
-
-        
-                        
-                    
-                
-
-
-                
-        
