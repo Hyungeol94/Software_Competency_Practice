@@ -1,4 +1,4 @@
-#https://leetcode.com/problems/find-the-pivot-integer/?envType=daily-question&envId=2024-03-13
+#https://leetcode.com/problems/find-the-pivot-integer/f
 
 class Solution:
     def pivotInteger(self, n: int) -> int:
@@ -14,5 +14,3 @@ class Solution:
             if isPivot(i):
                 return i
         return -1
-
-        
