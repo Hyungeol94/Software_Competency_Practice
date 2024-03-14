@@ -1,4 +1,3 @@
-#https://school.programmers.co.kr/learn/courses/30/lessons/42895
 from functools import lru_cache
 
 
@@ -13,21 +12,26 @@ def solution(N, number):
 
     @lru_cache(maxsize=None)
     def dp(i, depth):
-        if depth == 9:
+        if 9 <= depth:
             return float('inf')
 
-        if i in nums:
-            return nums[i]
+        if i == number:
+            return depth
+        
+        candidates = [float('inf')]
+        for num, count in list(nums.items()):
+            if 0 <= i-num:
+                candidates.append(dp(i-num, depth+count))
 
-        candidates = []
-        if 0 <= i - N:
-            candidates.append(1 + dp(i - N, depth + 1))
+            if (i % num) == 0:
+                candidates.append(dp(i//num, depth+count))
 
-        if (i % N) == 0:
-            candidates.append(1 + dp(i // N, depth + 1))
-
-        candidates.append(1 + dp(i + N, depth + 1))
-        candidates.append(1 + dp(i * N, depth + 1))
+            candidates.append(dp(i*num, depth+count))
+            candidates.append(dp(i+num, depth+count))
         return min(candidates)
 
-    return dp(number, 1) if dp(number, 0) != float('inf') else -1
+    candidates = []
+    for num, count in list(nums.items()):
+        candidates.append(dp(num, count))
+
+    return min(candidates) if min(candidates)!=float('inf') else 0
