@@ -6,17 +6,15 @@ class Solution:
         count = 0
         i = 0
         maxLen = 0
-        while i!=n:
-            count = count-1 if nums[i] == 0 else count+1
+        
+        while i != n:
+            count = count - 1 if nums[i] == 0 else count + 1
             if count == 0:
-                maxLen = max(maxLen, i+1)
-            if not countHash.get(count):
-                if not countHash.get(count) == 0:
-                    countHash[count] = i   
-                else:
-                    maxLen = max(maxLen, i-countHash[count])
+                maxLen = max(maxLen, i + 1)
+            if count not in countHash:
+                countHash[count] = i
             else:
-                maxLen = max(maxLen, i-countHash[count])
+                maxLen = max(maxLen, i - countHash[count])
             i += 1
 
         return maxLen
