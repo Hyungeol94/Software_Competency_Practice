@@ -1,7 +1,3 @@
-from functools import lru_cache
-import sys
-sys.setrecursionlimit(100000)
-
 def solution(money):
     n = len(money)
     dp1 = [[0]*(n) for _ in [0, 1]]
@@ -18,7 +14,7 @@ def solution(money):
     dp2[1][0] = 0
     for i in range(1, n):
         dp2[0][i] = max(dp2[0][i-1], dp2[1][i-1])
-        dp2[1][i] = money[i]+dp1[0][i-1]
+        dp2[1][i] = money[i]+dp2[0][i-1]
             
     return max(dp1[0][n-1], dp1[1][n-1], dp2[0][n-1], dp2[1][n-1])
     
