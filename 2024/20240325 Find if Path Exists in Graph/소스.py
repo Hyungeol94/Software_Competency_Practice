@@ -9,21 +9,20 @@ class Solution:
             k, v = edge
             adjacency_list[k].append(v)
             adjacency_list[v].append(k)
-        
+
         def dfs(mystack):
-            temp = mystack[-1]
-            if temp == destination: 
+            node = mystack[-1]
+            if node == destination: 
                 return True
             
             else:
-                for edge in adjacency_list[temp]:
-                    if not visited[edge]:
-                        mystack.append(edge)
-                        visited[edge] = True
+                for next_node in adjacency_list[node]:
+                    if not visited[next_node]:
+                        mystack.append(next_node)
+                        visited[next_node] = True
                         temp = dfs(mystack)
                         if temp == True:
                             return True
-                        visited[edge] = False
-                        mystack.pop()
-
+                        # visited[next_node] = False
+                        
         return True if dfs(mystack) else False
