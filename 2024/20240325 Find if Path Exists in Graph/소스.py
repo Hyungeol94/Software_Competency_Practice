@@ -20,7 +20,9 @@ class Solution:
                     if not visited[edge]:
                         mystack.append(edge)
                         visited[edge] = True
-                        return dfs(mystack)
+                        temp = dfs(mystack)
+                        if temp == True:
+                            return True
                         visited[edge] = False
                         mystack.pop()
 
