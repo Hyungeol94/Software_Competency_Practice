@@ -1,4 +1,5 @@
 #https://leetcode.com/problems/count-subarrays-where-max-element-appears-at-least-k-times/?envType=daily-question&envId=2024-03-29
+import bisect
 class Solution:
     def countSubarrays(self, nums: List[int], k: int) -> int:
         self.nums = nums
@@ -38,12 +39,11 @@ class Solution:
             for i, countSum in enumerate(self.countSum):
                 if countSum == self.k:
                     return i
-        
-        for i, countSum in enumerate(self.countSum):
-            if countSum-self.countSum[left-1] == self.k:
-                return i
-        return len(self.countSum)
-    
+
+        j = bisect.bisect_left(self.countSum, self.countSum[left-1]+self.k)
+        return j
+
+
         
         
 
