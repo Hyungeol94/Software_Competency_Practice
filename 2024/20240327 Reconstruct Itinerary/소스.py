@@ -1,47 +1,41 @@
 import bisect
 import copy
+from collections import defaultdict
 
 class Solution:
     def findItinerary(self, tickets: List[List[str]]) -> List[str]:
-        do_not_sort = False
-        if tickets == [["JFK","SFO"],["JFK","ATL"],["SFO","JFK"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"],["ATL","AAA"],["AAA","BBB"],["BBB","ATL"]]:
-            do_not_sort = True
-
-        adjList = {}
-        visited = {}
+        adjList = defaultdict(list)
+        ans = []
+        outCount = defaultdict(int)
 
         for k, v in tickets:
             # from, to 단방향
-            adjList[k] = [v] if k not in adjList else adjList[k] + [v]
-            visited[' '.join([k, v])] = 1 if ' '.join([k, v]) not in visited else  visited[' '.join([k, v])]+1
+            adjList[k] += [v]
+            outCount[k] += 1
             mystack = ["JFK"]
         
         for key in adjList:
-            adjList[key] = sorted(adjList[key]) if not do_not_sort else adjList[key]
+            adjList[key] = sorted(adjList[key])
         answer = []
 
         def dfs():
             node = mystack[-1]
-            if len(mystack) == len(tickets) + 1:
-                return mystack
+            #stuck -> backtrack
+            while outCount[node] == 0: 
+                ans.append(mystack.pop())
+                if not mystack:
+                    break
+                node = mystack[-1]
 
-            prev = None
-            if node in adjList:
-                for next_node in adjList[node]:
-                    if not visited[' '.join([node, next_node])] == 0:
-                        mystack.append(next_node)
-                        visited[' '.join([node, next_node])] -= 1
-                        temp = dfs()
-                        if temp:
-                            return temp
-                        visited[' '.join([node, next_node])] += 1
-                        mystack.pop()
+            #has unvisited node left
+            else:
+                if node in adjList:
+                    while adjList[node]:
+                        if not outCount[node] == 0:
+                            mystack.append(adjList[node].pop(0))
+                            outCount[node] -= 1
+                            dfs()
+        
+        dfs()
+        return ans[::-1]
 
-        temp = dfs()
-        return temp 
-
-
-#Output
-# ["JFK","ATL","JFK","ATL","SFO","SFO"]
-# Expected
-# ["JFK","ATL","JFK","SFO","ATL","SFO"]
