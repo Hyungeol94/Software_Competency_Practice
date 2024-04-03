@@ -1,4 +1,3 @@
-#https://leetcode.com/problems/all-paths-from-source-lead-to-destination/
 from copy import deepcopy
 from collections import defaultdict
 
