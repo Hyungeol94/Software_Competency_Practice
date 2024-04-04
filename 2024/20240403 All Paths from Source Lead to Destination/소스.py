@@ -1,58 +1,46 @@
-from copy import deepcopy
 from collections import defaultdict
+from functools import cache
+
 
 class Solution:
-    def leadsToDestination(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
-        #if you get stuck and the point you stuck is not the destination, return False
-        #if there is no return value of the backtracking, then all stuck point must have been the destination
+    def leadsToDestination(self, n: int, edges, source, destination):
+        # if you get stuck and the point you stuck is not the destination, return False
+        # if there is no return value of the backtracking, then all stuck point must have been the destination
 
         self.adjList = defaultdict(list)
-        self.visited = defaultdict(list)
+        # self.visited = defaultdict(list)
+        self.visited = set()
         self.destination = destination
+        self.source = source
 
         for k, v in edges:
             self.adjList[k].append(v)
-            self.visited[k].append(False)
-        
-        temp = copy.deepcopy(self.visited)
 
-        if not self.adjList[source]:
-            if source==destination:
-                return True
+        if not self.adjList or source not in self.adjList:
+            return source == destination
+        
+        if destination in self.adjList:
             return False
-            
-        for i, next_node in enumerate(self.adjList[source]):
-            if source == next_node:
-                return False
-            self.mystack = [next_node]
-            self.visited = copy.deepcopy(temp)
-            self.visited[source][i] = True
-            if self.dfs() == False:
-                return False
-        return True
-    
-    def dfs(self):
-        curr = self.mystack[-1]
-        if curr not in self.adjList or False not in self.visited[curr]:
-            if curr == self.destination:
-                return True
-            return False
+
+        # self.mystack = [source]
+        self.visited.add(source)
+        ret = self.dfs(source)
+        return False if ret == False else True
+   
+    @cache
+    def dfs(self, curr):
+        if curr not in self.adjList: #outgoing edge가 없는지를 먼저 확인(dead end 도착)
+            return curr == self.destination #그곳이 목적지인지 확인 
 
         for i, next_node in enumerate(self.adjList[curr]):
-            if not self.visited[curr][i]:
-                # if curr == next_node and curr!=self.destination:
-                if curr == next_node:
-                    return False
-                    
-                self.mystack.append(next_node)
-                self.visited[curr][i] = True
-                if self.dfs() == False:
-                    return False
-                self.visited[curr][i] = False
-                self.mystack.pop()
+            if next_node in self.visited:
+                return False
 
-
+            self.visited.add(next_node)
+            if self.dfs(next_node) == False:
+                return False
+            self.visited.remove(next_node)
         
-
-
+        return True
+        
 
