@@ -14,8 +14,6 @@ class Solution:
                     students.rotate(-1)
                     count += 1
                     if students[0] == sandwiches[-1]:
-                        students.popleft()
-                        sandwiches.pop()
                         break
                 if count == len(students):
                     return len(students)
