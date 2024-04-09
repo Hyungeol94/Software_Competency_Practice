@@ -17,13 +17,9 @@ class DisjointSet:
             return self.parents[i]
 
     def get_rank(self, root_k):
-        rank_root_k = None
-        if root_k in self.ranks:
-            rank_root_k = self.ranks[root_k]
-        else:
-            self.ranks[root_k] = root_k
-            rank_root_k = root_k
-        return rank_root_k
+        if root_k not in self.ranks:
+            self.ranks[root_k] = 1
+        return self.ranks[root_k]
 
     def union(self, k, v):
         root_k = self.find(k)
@@ -37,9 +33,6 @@ class DisjointSet:
 
         if rank_root_k < rank_root_v:
             self.parents[root_k] = root_v
-
-        if rank_root_k > rank_root_v:
-            self.parents[root_v] = root_k
 
         if rank_root_k == rank_root_v:
             self.ranks[root_k] += 1
@@ -75,23 +68,26 @@ def solution(edges):
     for key in instance.parents.keys():
         instance.find(key)
 
-    roots = list(set(list(instance.parents.values())))
     edge_count = defaultdict(int)
     node_set = defaultdict(set)
     #동일한 root에 속하는 edge와 node를 세기
     for k, v in edges:
         root = instance.find(v)
-        edge_count[root] += 1
-        node_set[root].add(k)
+        if k!=createdNode:
+            edge_count[root] += 1
+            node_set[root].add(k)
         node_set[root].add(v)
 
     answer = [createdNode, 0, 0, 0]
-    for root, edge_count in edge_count.items():
-        n = len(list(node_set[root]))
-        if edge_count == n:
+    for root, nodes in node_set.items():
+        n = len(nodes)
+        count = edge_count[root]
+        if count == n:
             answer[1]+=1
-        if edge_count == n-1:
+        if count == n-1:
             answer[2]+=1
-        if edge_count == n+1:
+        if count == n+1:
             answer[3]+=1
     return answer
+
+
