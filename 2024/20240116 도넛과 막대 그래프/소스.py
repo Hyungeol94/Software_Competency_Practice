@@ -2,7 +2,7 @@ from collections import defaultdict
 
 class DisjointSet:
     def __init__(self):
-        self.parents = defaultdict(int)
+        self.parents = {}
         self.ranks = {}
 
     def find(self, i):
@@ -27,6 +27,9 @@ class DisjointSet:
 
         rank_root_k = self.get_rank(root_k)
         rank_root_v = self.get_rank(root_v)
+
+        if root_k == root_v:
+            return
 
         if rank_root_k > rank_root_v:
             self.parents[root_v] = root_k
@@ -53,7 +56,7 @@ def solution(edges):
     candidates = list(set(adj_list.keys())-set(incoming_edges.keys()))
     createdNode = None
     for candidate in candidates:
-        if 2 <= len(outgoing_edges[candidate]) <= 3:
+        if 2 <= len(outgoing_edges[candidate]):
             createdNode = candidate
             break
 
