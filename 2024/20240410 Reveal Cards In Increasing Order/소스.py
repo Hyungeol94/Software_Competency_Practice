@@ -15,6 +15,7 @@ class Solution:
         orderedDeck = deque([])
         answer = sorted(deck)
         while answer:
+          
             if orderedDeck:
                 orderedDeck.appendleft(orderedDeck.pop())
             orderedDeck.appendleft(answer.pop())
