@@ -1,30 +1,49 @@
-#https://leetcode.com/problems/remove-k-digits/description/
-from functools import cache
-
 sys.setrecursionlimit(10000)
 sys.set_int_max_str_digits(10000)
 
 
 class Solution:
     def removeKdigits(self, num: str, k: int) -> str:
-        n = len(num)
-        mystack = []
-        global minNum
-        minNum = float("inf")
-        if n - k == 0:
-            return "0"
+        #제일 작은 값의 인덱스를 찾아서 그 앞뒤를 다 쳐내기
+        #앞을 먼저 쳐내기
+        #그다음에 뒤를 쳐내기
+        #반복하기
+        def remove(num, k):
+            minNum = min(num)
+            left = num.index(minNum)
+            if len(num) == k:
+                return ''
 
-        def dfs(i):
-            if len(mystack) == n - k:
-                global minNum
-                minNum = min(minNum, int("".join(mystack)))
-                return
+            if len(num[:left]) == k:
+                return num[left:]
 
-            else:
-                for j in range(i + 1, n):
-                    mystack.append(num[j])
-                    dfs(j)
-                    mystack.pop()
+            if len(num[:left]) < k: #최소값의 위치보다 적게 있을 때
+                return num[left]+remove(num[left+1:], k-len(num[:left]))
 
-        dfs(-1)
-        return str(minNum)
+            if len(num[:left]) > k:
+                return remove(num[:left], k)+num[left:]
+
+        ans = remove(num, k)
+        return str(int(ans)) if ans!='' else "0"
+
+
+     
+
+                    
+            
+            
+            
+
+            
+
+            
+
+            
+
+
+
+                    
+                        
+            
+            
+        
