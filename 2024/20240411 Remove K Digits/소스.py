@@ -1,5 +1,5 @@
-sys.setrecursionlimit(10000)
-sys.set_int_max_str_digits(10000)
+sys.setrecursionlimit(100000)
+sys.set_int_max_str_digits(100000)
 
 
 class Solution:
