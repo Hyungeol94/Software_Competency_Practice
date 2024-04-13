@@ -26,7 +26,7 @@ class Solution:
         #정사각형에 관한 dp 테이블을 만들기
         for i in range(1, n):
             for j in range(1, m):
-                if matrix[i-1][j]=="1" and matrix[i][j-1]=="1" and matrix[i-1][j-1]=="1":
+                if matrix[i][j] == "1" and matrix[i-1][j]=="1" and matrix[i][j-1]=="1" and matrix[i-1][j-1]=="1":
                     dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])+1
                 else:
                     dp[i][j] = int(matrix[i][j])
@@ -45,13 +45,5 @@ class Solution:
                 maxSize = max(maxSize, k**2 + (curr-1)*k) if curr else maxSize
         
         return maxSize
-
-       
-        
-
-
-
-        
-
 
         
