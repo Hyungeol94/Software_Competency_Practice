@@ -38,7 +38,7 @@ class Solution:
             for i in range(n):
                 curr = self.get_monotonic_length(dp[i], k)
                 maxSize = max(maxSize, k**2 + (curr-1)*k) if curr else maxSize
-        
+      
         for k in range(1, m+1):
             for j, col in enumerate(zip(*dp)):
                 curr = self.get_monotonic_length(col, k)
