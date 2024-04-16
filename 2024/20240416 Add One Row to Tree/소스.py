@@ -6,6 +6,10 @@
 #         self.right = right
 class Solution:
     def addOneRow(self, root: Optional[TreeNode], val: int, depth: int) -> Optional[TreeNode]:
+        if depth == 1:
+                newRoot = TreeNode(val, left=root, right=None)
+                return newRoot
+
         def dfs(curr, depth):
             left_root = curr.left
             right_root = curr.right
@@ -28,6 +32,6 @@ class Solution:
                     dfs(curr.right, depth-1)
 
         dfs(root, depth)    
-        return root 
+        return root
         
 
