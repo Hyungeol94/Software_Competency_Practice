@@ -21,7 +21,7 @@ class Solution:
                     
                     if isValid(next_row, next_col) and visited[next_row][next_col]:
                         count += 1
-            return count
+            return countzz
             
 
         def bfs():
