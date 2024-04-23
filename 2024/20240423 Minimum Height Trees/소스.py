@@ -12,26 +12,21 @@ class Solution:
             self.adjList[k].add(v)
             self.adjList[v].add(k)
         
+
+        leaves = []
+        for key, nodes in self.adjList.items():
+            if len(nodes) == 1:
+                leaves.append(key)
+        
         #리프노드 리스트 구하기
-        while len(self.adjList) > 2:
-            leaves = []
-            for key, nodes in self.adjList.items():
-                    if len(nodes) == 1:
-                        leaves.append(key)
-            
+        while len(self.adjList) > 2: 
+            new_leaves = []
             for leaf in leaves:
+                neighbor = self.adjList[leaf].pop()
                 del self.adjList[leaf]
-                for key, nodes in self.adjList.items():
-                    if leaf in nodes:
-                        nodes.remove(leaf)
+                self.adjList[neighbor].remove(leaf)
+                if len(self.adjList[neighbor]) == 1:
+                    new_leaves.append(neighbor)
+            leaves = new_leaves
         
         return self.adjList.keys()
-
-                
-
-        
-
-
-           
-        
-    
