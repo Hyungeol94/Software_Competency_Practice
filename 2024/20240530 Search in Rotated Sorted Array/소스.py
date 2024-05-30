@@ -1,3 +1,5 @@
+import bisect
+
 class Solution:
     def isSorted(self, left, right, nums):
         if nums[left] < nums[right]:
@@ -36,9 +38,11 @@ class Solution:
             return self.BinarySearch(mid, right, target, nums)
         
         elif nums[mid] > target:
-            return self.BinarySearch(mid, right, target, nums)
+            return self.BinarySearch(left, mid, target, nums)
     
 
     def search(self, nums: List[int], target: int) -> int:
         minIndex = self.findMin(0, len(nums)-1, nums)
-        return self.BinarySearch(0, len(nums)-1, target, nums)
+        leftResult = self.BinarySearch(0, minIndex-1, target, nums)
+        rightResult =self.BinarySearch(minIndex, len(nums)-1, target, nums)
+        return -1 if leftResult == -1 and rightResult == -1 else max(leftResult, rightResult)
