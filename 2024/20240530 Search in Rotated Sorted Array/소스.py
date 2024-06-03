@@ -1,4 +1,5 @@
 import bisect
+from typing import List
 
 class Solution:
     def isSorted(self, left, right, nums):
