@@ -66,3 +66,7 @@ def solution(dice):
     instance = Solution(dice)
     answer = instance.maximumWinningProbability()
     return answer
+
+# instance = Solution(dice)
+# instance.maximumWinningProbability()
+
