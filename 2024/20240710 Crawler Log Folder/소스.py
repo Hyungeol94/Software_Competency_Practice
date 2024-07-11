@@ -1,4 +1,4 @@
-https://leetcode.com/problems/crawler-log-folder/?envType=daily-question&envId=2024-07-10
+#https://leetcode.com/problems/crawler-log-folder/?envType=daily-question&envId=2024-07-10
 
 class Solution:
     def minOperations(self, logs: List[str]) -> int:
