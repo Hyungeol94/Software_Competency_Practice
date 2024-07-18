@@ -11,56 +11,14 @@ class Solution:
     def __init__ (self):
         self.path = ''
         self.mystack = []
+        self.hashLeaves = set()
+        self.distance = 0
+        self.count = 0
+        self.parents = dict()
+        self.visited = set()
 
-    def findPath(self, root, node):
-        if self.mystack and self.mystack[-1] is node:
-            return self.path
+    # def findPath(self, root, node):
         
-        else:
-            if root.left:
-                self.mystack.append(root.left)
-                self.path += ('L')
-                result = self.findPath(root.left, node)
-                if result:
-                    return result
-                self.path = self.path[:-1]
-                self.mystack.pop()
-
-            if root.right:
-                self.mystack.append(root.right)
-                self.path += ('R')
-                result = self.findPath(root.right, node)
-                if result:
-                    return result
-                self.path = self.path[:-1]
-                self.mystack.pop()
-
-   
-    def getDirections(self, root: Optional[TreeNode], startNode:Optional[TreeNode], destNode:Optional[TreeNode] ) -> str:
-        self.path = ''
-        self.mystack = [root]
-        pathToStart = self.findPath(root, startNode)
-        self.path = ''
-        self.mystack = [root]
-        pathToDest = self.findPath(root, destNode)
-
-        pathToDest = deque(pathToDest)
-        pathToStart = deque(pathToStart)
-
-        while pathToStart and pathToDest:
-            if pathToStart[0] == pathToDest[0]:
-                pathToStart.popleft()
-                pathToDest.popleft()
-                continue
-            break
-
-        pathToDest = ''.join(list(pathToDest))
-        pathToStart = ''.join(list(pathToStart))
-        
-        
-        fromStartToRoot = ''.join(['U' for _ in pathToStart])
-        return fromStartToRoot+pathToDest
-    
     def getLeaves(self, root):
         myqueue = deque([root])
         leaves = []
@@ -75,17 +33,61 @@ class Solution:
 
             myqueue.append(curr.left)
             myqueue.append(curr.right)
-        return leaves
+        return leaves   
+
+    def getParents(self, root):
+        myqueue = deque([root])
+        while myqueue:
+            curr = myqueue.popleft()
+            if not curr:
+                continue
+            
+            if curr.left:
+                self.parents[curr.left] = curr
+                myqueue.append(curr.left)
+            
+            if curr.right:
+                self.parents[curr.right] = curr
+                myqueue.append(curr.right)
+        
+
+    def dfs(self, depth):
+        curr = self.mystack.pop()
+        if depth != 0 and curr in self.leavesHash:
+            self.count += 1
+            
+        if depth == self.distance:
+            return
+        
+        else:
+            if not curr:
+                return
+            
+            #curr의 parent로 돌아가는 방법?
+            if self.parents.get(curr) and curr not in self.visited:
+                self.visited.add(curr)
+                self.mystack.append(self.parents.get(curr))
+                self.dfs(depth+1)
+
+            if curr.left and curr.left not in self.visited:
+                self.visited.add(curr.left)
+                self.mystack.append(curr.left)
+                self.dfs(depth+1)
+            
+            if curr.right and curr.right not in self.visited:
+                self.visited.add(curr.right)
+                self.mystack.append(curr.right)
+                self.dfs(depth+1)
 
     
     def countPairs(self, root: TreeNode, distance: int) -> int:
+        self.distance = distance
         leaves = self.getLeaves(root)
-        count = 0
-        for startNode, destNode in combinations(leaves, 2):
-            path = self.getDirections(root, startNode, destNode)
-            if len(path) <= distance:
-                count += 1
-        return count
+        self.getParents(root)
+        self.leavesHash = set(leaves)
+        for leave in leaves:
+            self.mystack = [leave]
+            self.visited = set()
+            self.dfs(0)
 
-    
-        
+        return self.count // 2 
