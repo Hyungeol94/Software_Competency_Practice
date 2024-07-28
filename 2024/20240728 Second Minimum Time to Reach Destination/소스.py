@@ -24,15 +24,30 @@ class Solution:
         myqueue = [[0, 1]]
         heapq.heapify(myqueue)
         answer = -float('inf')
+        min_time = {i: float('inf') for i in range(1, n+1)}
+        second_min_time = {i: float('inf') for i in range(1, n+1)}
+
         while myqueue:
             curr = heapq.heappop(myqueue)
             timeSpent, k = curr
-            if k == n: 
-                if answer!= -float('inf') and answer!=timeSpent:
-                    return timeSpent 
-                else:
-                    answer = timeSpent
+            if k == n:
+                if timeSpent > min_time[n] and timeSpent < second_min_time[n]:
+                    second_min_time[n] = timeSpent
+                elif timeSpent < min_time[n]:
+                    second_min_time[n] = min_time[n]
+                    min_time[n] = timeSpent
+                if second_min_time[n] != float('inf'):
+                    return second_min_time[n]
+            
             if self.isInRed(timeSpent, change):
                 timeSpent = self.waitForGreen(timeSpent, change)
+
             for node in adjList[k]:
-                heapq.heappush(myqueue, [timeSpent+time, node])
+                next_time = timeSpent + time
+                if next_time < min_time[node]:
+                    min_time[node] = next_time
+                    heapq.heappush(myqueue, [next_time, node])
+                
+                if next_time > min_time[node] and next_time < second_min_time[node]:
+                    second_min_time[node] = next_time
+                    heapq.heappush(myqueue, [next_time, node])
