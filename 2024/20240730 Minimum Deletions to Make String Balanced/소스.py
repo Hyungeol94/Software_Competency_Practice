@@ -1,21 +1,23 @@
+from functools import cache
+
 class Solution:
     def minimumDeletions(self, s: str) -> int:
-        @cache
-        def dp(a_last, b_first):
-            new_a_last = -float('inf')
-            for i in range(b_first+1, a_last):
-                if s[i] == 'a':
-                    new_a_last = i
+        B_befores = [0]*len(s)
+        A_forwards = [0]*len(s)
 
-            new_b_first = float('inf')
-            for i in reversed(range(b_first+1, a_last)):
-                if s[i] == 'b':
-                    new_b_first = i
+        sum = 0
+        for i, c in enumerate(s):
+            if c == 'b':
+                sum += 1
+            B_befores[i] = sum
+        
+        sum = 0
+        for i in reversed(range(len(s))):
+            if s[i] == 'a':
+                sum += 1
+            A_forwards[i] = sum
 
-            if new_a_last < new_b_first:
-                return 0
-
-            else:
-                return min(1+dp(new_a_last, b_first), 1+dp(a_last, new_b_first))
-
-        return dp(len(s), -1)
+        answer = float('inf')
+        for i in range(len(s)):
+            answer = min(answer, B_befores[i]+A_forwards[i]-1)
+        return answer
