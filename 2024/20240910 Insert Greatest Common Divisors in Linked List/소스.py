@@ -8,7 +8,7 @@ from collections import defaultdict
 class Solution:
     def __init__(self):
         self.primeNums = []
-        for i in range(2, 5001):
+        for i in range(2, 1001):
             isPrime = True
             for j in self.primeNums:
                 if i % j == 0:
