@@ -4,6 +4,7 @@
 #         self.val = val
 #         self.next = next
 from collections import defaultdict
+from typing import Optional
 
 class Solution:
     def __init__(self):
