@@ -18,4 +18,4 @@ class Solution:
             if nums[i] == max_val:
                 update()
             i += 1
-        return max_len
+        return max_le
