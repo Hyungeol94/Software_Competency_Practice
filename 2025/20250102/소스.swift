@@ -1,3 +1,6 @@
+// Count Vowel Strings in Ranges
+// https://leetcode.com/problems/count-vowel-strings-in-ranges/description/?envType=daily-question&envId=2025-01-02
+
 class Solution {
     func vowelStrings(_ words: [String], _ queries: [[Int]]) -> [Int] {
         var prefixSums: [Int] = []
