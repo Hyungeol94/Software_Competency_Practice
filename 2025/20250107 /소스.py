@@ -1,3 +1,6 @@
+#https://leetcode.com/problems/string-matching-in-an-array/?envType=daily-question&envId=2025-01-07
+#1408. String Matching in an Array
+
 import re
 
 class Solution:
