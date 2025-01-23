@@ -13,7 +13,6 @@ class Solution:
         matrix = [[0]*m for _ in range(n)]
         visited = [[False]*m for _ in range(n)]
 
-
         for i in range(n):
             for j in range(m):
                 if isWater[i][j]:
