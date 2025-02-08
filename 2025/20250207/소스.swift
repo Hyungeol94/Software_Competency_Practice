@@ -1,3 +1,6 @@
+//https://leetcode.com/problems/make-number-of-distinct-characters-equal/description/
+//2531. Make Number of Distinct Characters Equal
+
 class Solution {
     func hasUniqueElement(_ keys: Set<Character>, _ freqDist: [Character: Int]) -> Bool { 
         for key in keys {
