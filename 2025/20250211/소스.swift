@@ -48,7 +48,8 @@ class Solution {
             if res == -1 {
                 break
             }
-            let newArr = Array(sArr[0..<res] + sArr[res+part.count..<sArr.count])
+            // let newArr = Array(sArr[0..<res] + sArr[res+part.count..<sArr.count])
+            sArr.removeSubrange(res..<res + partArr.count)
             sArr = newArr
         }
         return String(sArr)
