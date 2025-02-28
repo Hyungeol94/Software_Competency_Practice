@@ -1,3 +1,5 @@
+#https://leetcode.com/problems/length-of-longest-fibonacci-subsequence/description/
+#873. Length of Longest Fibonacci Subsequence
 import bisect
 
 class Solution:
@@ -12,7 +14,7 @@ class Solution:
             for j in range(i, len(arr)):
                 mystack.append(arr[j])
                 self.dfs(arr, j+1, mystack)
-                mystack.pop()
+                mystack.pop()                                                                      
         
         else:
             index = bisect.bisect_left(arr, mystack[-2]+mystack[-1])
@@ -23,7 +25,8 @@ class Solution:
         
 
     def lenLongestFibSubseq(self, arr: List[int]) -> int:
-        #일단 dfs -> 조건적으로 쌓기
+        #일단 dfs -> \
+        #조건적으로 쌓기
         mystack = []
         self.dfs(arr, 0, mystack)
         return self.maxLen
