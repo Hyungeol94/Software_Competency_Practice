@@ -18,9 +18,7 @@ class Solution:
                 return curr_point
 
             maxVal = curr_point + dp(i+curr_brainpower+1)
-            for j in range(i+1, n):
-                curr_point, curr_brainpower = questions[j]
-                maxVal = max(maxVal, curr_point + dp(j+curr_brainpower+1))
+            maxVal = max(maxVal, dp(i+1))
             
             return maxVal
         
