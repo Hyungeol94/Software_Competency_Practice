@@ -6,6 +6,9 @@ from fractions import Fraction
 
 class Solution:
     def operate(self, num1: Fraction, num2: Fraction, operator:str) -> Fraction:
+        if num1 is None or num2 is None:
+            return None
+            
         if operator == '+':
             return num1 + num2
 
@@ -16,7 +19,7 @@ class Solution:
             return num1 * num2
         
         else: 
-            return (num1 / num2) if num2 != 0 else (num1 / -1)
+            return (num1 / num2) if num2 != 0 else None
 
     def calculate(self, nums: List[int], operators: List[str], form: int)->int:
         if form == 1:
