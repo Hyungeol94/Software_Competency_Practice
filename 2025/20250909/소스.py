@@ -2,9 +2,46 @@
 #2327. Number of People Aware of a Secret
 
 class Solution:
+    from collections import deque
+
+class Solution:
     def peopleAwareOfSecret(self, n: int, delay: int, forget: int) -> int:
         arr_inactive = [0]*n
         arr_active = [0]*n
+        #O(n) solution
+
+        #day 0
+        #delay ~ forget 저장
+        arr_inactive[0] += 1
+        arr_inactive[delay] -= 1
+        arr_active[delay] += 1
+        if forget < n:
+            arr_active[forget] -= 1
+        
+        acc_inactive = 0
+        acc_active = 0
+        i = 0
+        while i < n:
+            acc_inactive += arr_inactive[i]
+            acc_active += arr_active[i]
+            acc_inactive += acc_active
+
+            arr_inactive[i] += acc_active
+            if i+delay < n:
+                arr_inactive[i+delay] -= acc_active
+            if i+delay < n:
+                arr_active[i+delay] += acc_active
+            if i+forget < n:
+                arr_active[i+forget] -= acc_active
+            i += 1
+
+        return (acc_inactive + acc_active) % (10**9+7)
+    
+
+    def peopleAwareOfSecret_inefficient(self, n: int, delay: int, forget: int) -> int:
+        arr_inactive = [0]*n
+        arr_active = [0]*n
+        #O(n * forget) solution
 
         #day 0
         i = 0
