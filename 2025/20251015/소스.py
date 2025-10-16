@@ -33,3 +33,21 @@ class Solution:
         indices = range(1, len(nums))
         index = bisect.bisect_left(indices, True, key=lambda a: self.hasIncreasingSubarrays(nums, a))
         return index
+
+    def maxIncreasingSubarrays2(self, nums: List[int]) -> int:
+        #binary search
+        n = len(nums)
+        left = 1
+        right = n-1
+
+        while left < right:
+            mid = (left+right) // 2
+            if self.hasIncreasingSubarrays(nums, mid):
+                left = mid+1
+            else:
+                right = mid
+
+        if self.hasIncreasingSubarrays(nums, left):
+            return left
+        else:
+            return left-1
