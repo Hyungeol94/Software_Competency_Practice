@@ -2,12 +2,13 @@
 #3381. Maximum Subarray Sum With Length Divisible by K
 
 from typing import List
+from collections import defaultdict
 
 class Solution:
     def maxSubarraySum(self, nums: List[int], k: int) -> int:
-        minPrefixSum = {i:float('inf') for i in range(k)}
         acc = 0
         maxVal = -float('inf')
+        minPrefixSum = defaultdict(lambda: float('inf'))
         for i, num in enumerate(nums):
             acc += num
             if i >= k: #length divisible by k를 맞추기 위함
