@@ -51,7 +51,7 @@ class SegmentTree:
         if left <= tree_left and tree_right <= right:
             return self.values[curr]
 
-        else:
+        else:   
             mid = (tree_left + tree_right) // 2
             left_val = self._query_helper(left, right, tree_left, mid, curr * 2 + 1)
             right_val = self._query_helper(left, right, mid+1, tree_right, curr * 2 + 2)
