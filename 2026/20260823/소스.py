@@ -1,3 +1,6 @@
+#https://leetcode.com/problems/sum-game/?envType=daily-question&envId=2026-08-23
+#1927. Sum Game
+
 class Solution:
     def sumGame(self, num: str) -> bool:
         n = len(num)
